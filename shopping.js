@@ -3,7 +3,7 @@
 // }
 
 
-let cart = []
+let cart = JSON.parse(localStorage.getItem('item')) || []
 
 function addItem() {
     let userInput = document.getElementById('input').value
@@ -12,6 +12,7 @@ function addItem() {
         alert('Kindly Fill your item')
     } else {
         cart.push(userInput)
+        localStorage.setItem('item', JSON.stringify(cart))
         console.log(cart);
         document.getElementById('input').value = ''
         displayItem()
@@ -25,17 +26,20 @@ function deleteLast() {
     }
     else {
         cart.pop()
+        localStorage.setItem('item',JSON.stringify(cart))
         displayItem()
     }
 
 }
 
 function deleteAll() {
-    if (cart.length == 0) {
-        alert('There is nothing to delete')
-    } else {
+    let check = confirm('are you sure you want to delete all?')
+    if (check) {
         cart.splice(0, cart.length)
         document.getElementById('display').innerHTML = `<p>Your Selected Items Are Deleted</p>`
+    }
+    else if (cart.length == 0) {
+        alert('There is nothing to delete')
     }
 }
 
@@ -47,9 +51,16 @@ function displayItem() {
     }
 }
 
-function deleteItem(index){
-    cart.splice(index,1)
-    document.getElementById('display').innerHTML = ''
-    displayItem()
+function deleteItem(index) {
+    let check = confirm('are you sure you want to delete?')
+    if (check) {
+        cart.splice(index, 1)
+        localStorage.setItem('item',JSON.stringify(cart))
+        displayItem()
+    } else {
+        displayItem()
+    }
+
 }
 
+displayItem()
